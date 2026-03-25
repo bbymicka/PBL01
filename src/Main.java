@@ -41,10 +41,10 @@ public class Main {
             EstruturaLinear<Pixel> estrutura;
 
             if (estruturaEscolhida == 1) {
-                estrutura = new FilaArrayList<>();
+                estrutura = new Fila<>();
                 System.out.println("Modo escolhido: FIFO");
             } else if (estruturaEscolhida == 2) {
-                estrutura = new PilhaArrayList<>();
+                estrutura = new Pilha<>();
                 System.out.println("Modo escolhido: LIFO");
             } else {
                 System.out.println("Estrutura inválida.");
