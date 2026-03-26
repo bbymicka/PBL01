@@ -2,12 +2,16 @@ import java.awt.image.BufferedImage;
 
 public class PreenchedorImagem {
 
-    public void floodFillAnimado(BufferedImage imagem,
-                                 int xInicial,
-                                 int yInicial,
-                                 int novaCor,
-                                 EstruturaLinear<Pixel> estrutura,
-                                 VisualizadorImagem visualizador) {
+    private static final int PIXELS_POR_FRAME = 20;
+
+    public MinhaArrayList<BufferedImage> floodFillAnimado(BufferedImage imagem,
+                                                int xInicial,
+                                                int yInicial,
+                                                int novaCor,
+                                                EstruturaLinear<Pixel> estrutura,
+                                                VisualizadorImagem visualizador) {
+        MinhaArrayList<BufferedImage> frames = new MinhaArrayList<>();
+
         if (!dentroDosLimites(imagem, xInicial, yInicial)) {
             throw new IllegalArgumentException("Ponto inicial fora da imagem.");
         }
@@ -15,10 +19,13 @@ public class PreenchedorImagem {
         int corOriginal = imagem.getRGB(xInicial, yInicial);
 
         if (corOriginal == novaCor) {
-            return;
+            frames.add(copiarImagem(imagem));
+            return frames;
         }
 
+        frames.add(copiarImagem(imagem));
         estrutura.inserir(new Pixel(xInicial, yInicial));
+        int pixelsPintados = 0;
 
         while (!estrutura.estaVazia()) {
             Pixel atual = estrutura.remover();
@@ -35,12 +42,11 @@ public class PreenchedorImagem {
             }
 
             imagem.setRGB(x, y, novaCor);
-            visualizador.atualizar();
+            pixelsPintados++;
 
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+            if (pixelsPintados % PIXELS_POR_FRAME == 0) {
+                frames.add(copiarImagem(imagem));
+                visualizador.atualizar();
             }
 
             estrutura.inserir(new Pixel(x + 1, y));
@@ -48,9 +54,22 @@ public class PreenchedorImagem {
             estrutura.inserir(new Pixel(x, y + 1));
             estrutura.inserir(new Pixel(x, y - 1));
         }
+
+        if (pixelsPintados % PIXELS_POR_FRAME != 0) {
+            frames.add(copiarImagem(imagem));
+        }
+
+        visualizador.atualizar();
+        return frames;
     }
 
     private boolean dentroDosLimites(BufferedImage imagem, int x, int y) {
         return x >= 0 && x < imagem.getWidth() && y >= 0 && y < imagem.getHeight();
+    }
+
+    private BufferedImage copiarImagem(BufferedImage original) {
+        BufferedImage copia = new BufferedImage(original.getWidth(), original.getHeight(), original.getType());
+        copia.getGraphics().drawImage(original, 0, 0, null);
+        return copia;
     }
 }
