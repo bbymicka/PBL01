@@ -6,6 +6,7 @@ public class Main {
         try {
             String caminhoEntrada = "src/FormaGeometricaDemas.png";
             String caminhoSaida = "src/saida.png";
+            String caminhoGif = "src/saida.gif";
 
             BufferedImage imagem = GerenciadorImagem.carregarImagem(caminhoEntrada);
 
@@ -56,11 +57,20 @@ public class Main {
             VisualizadorImagem visualizador = new VisualizadorImagem(imagem);
             PreenchedorImagem preenchedor = new PreenchedorImagem();
 
-            preenchedor.floodFillAnimado(imagem, xInicial, yInicial, novaCor, estrutura, visualizador);
+            MinhaArrayList<BufferedImage> frames = preenchedor.floodFillAnimado(
+                    imagem,
+                    xInicial,
+                    yInicial,
+                    novaCor,
+                    estrutura,
+                    visualizador
+            );
 
             GerenciadorImagem.salvarImagem(imagem, "png", caminhoSaida);
+            GeradorGif.salvarGifAnimado(frames, caminhoGif, 60, true);
 
             System.out.println("Imagem salva com sucesso em: " + caminhoSaida);
+            System.out.println("GIF salvo com sucesso em: " + caminhoGif);
 
         } catch (Exception e) {
             System.out.println("Erro ao executar o programa: " + e.getMessage());
