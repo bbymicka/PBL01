@@ -2,14 +2,14 @@ import java.awt.image.BufferedImage;
 
 public class PreenchedorImagem {
 
-    private static final int PIXELS_POR_FRAME = 20;
+    private static final int PIXELS_POR_FRAME = 300;
 
     public MinhaArrayList<BufferedImage> floodFillAnimado(BufferedImage imagem,
-                                                int xInicial,
-                                                int yInicial,
-                                                int novaCor,
-                                                EstruturaLinear<Pixel> estrutura,
-                                                VisualizadorImagem visualizador) {
+                                                          int xInicial,
+                                                          int yInicial,
+                                                          int novaCor,
+                                                          EstruturaLinear<Pixel> estrutura,
+                                                          VisualizadorImagem visualizador) {
         MinhaArrayList<BufferedImage> frames = new MinhaArrayList<>();
 
         if (!dentroDosLimites(imagem, xInicial, yInicial)) {
@@ -53,10 +53,6 @@ public class PreenchedorImagem {
             estrutura.inserir(new Pixel(x - 1, y));
             estrutura.inserir(new Pixel(x, y + 1));
             estrutura.inserir(new Pixel(x, y - 1));
-        }
-
-        if (pixelsPintados % PIXELS_POR_FRAME != 0) {
-            frames.add(copiarImagem(imagem));
         }
 
         visualizador.atualizar();
