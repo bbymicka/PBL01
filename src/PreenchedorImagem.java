@@ -54,6 +54,7 @@ public class PreenchedorImagem {
             estrutura.inserir(new Pixel(x, y + 1));
             estrutura.inserir(new Pixel(x, y - 1));
         }
+        frames.add(copiarImagem(imagem));
 
         visualizador.atualizar();
         return frames;
